@@ -38,6 +38,7 @@ This repository includes multiple versions for different stages of experimentati
 ## 2. FOLDER STRUCTURE
 ----------------------------------------
 
+```
 Tiny Recursive Model/
 ├── README.txt
 ├── requirements.txt
@@ -55,6 +56,7 @@ Tiny Recursive Model/
 │   └── logs/
 └── docs/
     └── README_TRM_PAPER.md
+```
 
 ## 3. INSTALLATION
 ----------------------------------------
