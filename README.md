@@ -1,6 +1,5 @@
-========================================
+
 ## 🧩 TINY RECURSIVE MODEL (TRM)
-========================================
 
 Original Implementation of TRM with Reinforcement Learning Environments
 (Maze, Sudoku, etc.)
@@ -8,8 +7,7 @@ Original Implementation of TRM with Reinforcement Learning Environments
 This repository implements multiple versions of the Tiny Recursivr Model (TRM) —
 a recurrent reasoning model designed for structured decision-making and temporal reasoning tasks.
 
-----------------------------------------
- TL;DR SUMMARY
+##  TL;DR SUMMARY
 ----------------------------------------
 
 | Task                  | File                              | Status         |
@@ -21,8 +19,8 @@ a recurrent reasoning model designed for structured decision-making and temporal
 | Compare baselines      | maze_comparison.py                | ✅ Done  
 
 
-----------------------------------------
-1. OVERVIEW
+
+## 1. OVERVIEW
 ----------------------------------------
 
 TRM introduces a hierarchical recursive architecture for reasoning tasks.
@@ -37,8 +35,7 @@ This repository includes multiple versions for different stages of experimentati
 | Full (Paper)   | trm_rl_paper_implementation.py | Hierarchical TRM with K-cycles, carry, SwiGLU |
 | Debug          | trm_rl_debug.py              | Diagnostic tools and failure analysis |
 
-----------------------------------------
-2. FOLDER STRUCTURE
+## 2. FOLDER STRUCTURE
 ----------------------------------------
 
 Tiny Recursive Model/
@@ -59,8 +56,7 @@ Tiny Recursive Model/
 └── docs/
     └── README_TRM_PAPER.md
 
-----------------------------------------
-3. INSTALLATION
+## 3. INSTALLATION
 ----------------------------------------
 
 Clone the repository and install dependencies:
@@ -69,8 +65,8 @@ Clone the repository and install dependencies:
     cd Tiny-Recursive-Model
     pip install -r requirements.txt
 
-----------------------------------------
-4. QUICK START
+
+## 4. QUICK START
 ----------------------------------------
 
 Step 1: Run a debug check
@@ -84,8 +80,8 @@ This will:
 - Train an MLP baseline
 - Save comparison plots and logs under "results/"
 
-----------------------------------------
-5. ARCHITECTURE SUMMARY
+
+## 5. ARCHITECTURE SUMMARY
 ----------------------------------------
 
 ### Basic TRM (evns, improved)
@@ -110,8 +106,8 @@ Key Features:
 - Deep supervision
 - Multiple baseline comparisons (MLP, TRM-K3, TRM-K5)
 
-----------------------------------------
-6. HYPERPARAMETER RECOMMENDATIONS
+
+## 6. HYPERPARAMETER RECOMMENDATIONS
 ----------------------------------------
 
 ### For Maze (5×5)
@@ -147,8 +143,7 @@ entropy_coef = 0.02  # More exploration
 n_episodes = 1000
 ```
 
-----------------------------------------
-7. EXPECTED RESULTS
+## 7. EXPECTED RESULTS
 ----------------------------------------
 
 ### Maze Environment (5×5)
@@ -160,8 +155,8 @@ n_episodes = 1000
 | **trm_rl_paper_implementation.py** | **~85-90%** | Slower (K cycles) |
 | MLP Baseline | ~60-70% | Fast |
 
-----------------------------------------
-9. RESEARCH DIRECTIONS
+
+## 8. RESEARCH DIRECTIONS
 ----------------------------------------
 
 ### Easy Experiments
@@ -182,8 +177,7 @@ n_episodes = 1000
 - [ ] Compare with Transformers
 - [ ] Publish results
 
-----------------------------------------
-10. LOGGING & VISUALIZATION
+## 9. LOGGING & VISUALIZATION
 ----------------------------------------
 
 All implementations now include:
@@ -199,8 +193,7 @@ The paper implementation additionally provides:
 - ✅ Parameter count comparison
 - ✅ Smooth curves with raw data overlay
 
-----------------------------------------
-11. REQUIREMENTS
+## 10. REQUIREMENTS
 ----------------------------------------
 
 
@@ -214,8 +207,7 @@ The paper implementation additionally provides:
 Install with:
     pip install torch numpy matplotlib tqdm gymnasium
 
-----------------------------------------
-12. CITATION
+## 11. CITATION
 ----------------------------------------
 
 If you use this repository in your research, please cite:
@@ -226,5 +218,3 @@ If you use this repository in your research, please cite:
   year   = {2025},
   url    = {https://github.com/acharyaanusha/Tiny-Recursive-Model}
 }
- 
-----------------------------------------
