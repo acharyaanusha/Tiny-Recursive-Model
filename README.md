@@ -205,10 +205,11 @@ Install with:
 ## 11. CITATION
 
 If you use this repository in your research, please cite:
-
+```
 @software{anushaacharya2025trm,
   title  = {Tiny Recursive Models (TRM)},
   author = {Anusha Acharya},
   year   = {2025},
   url    = {https://github.com/acharyaanusha/Tiny-Recursive-Model}
 }
+```
