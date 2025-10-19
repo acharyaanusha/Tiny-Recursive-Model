@@ -9,13 +9,13 @@ a recurrent reasoning model designed for structured decision-making and temporal
 
 ##  TL;DR SUMMARY
 
-| Task                  | File                              | Status         |
-|------------------------|-----------------------------------|----------------|
-| Learn TRM basics       | trm.py                            | ✅ Basic       |
-| Debug RL setup         | trm_rl_debug.py                   | ✅ Stable      |
-| Run RL experiments     | trm_rl_improved.py                | ✅✅ Improved   |
-| Paper-level TRM        | trm_rl_paper_implementation.py    | ⭐ Recommended |
-| Compare baselines      | maze_comparison.py                | ✅ Done  
+| Task                   | File                                                   | Status         |
+|------------------------|-------------------------------------------------------|----------------|
+| Learn TRM basics       | trm.py                                                | ✅ Basic       |
+| Debug RL setup         | trm_rl_debug.py                                       | ✅ Stable      |
+| Run RL experiments     | trm_rl_improved.py, trm_rl_optimized_updated_sudoku   | ✅✅ Improved   |
+| Paper-level TRM        | trm_rl_paper_implementation.py                        | ⭐ Recommended |
+| Compare baselines      | maze_comparison.py                                    | ✅ Done  
 
 
 
@@ -29,7 +29,7 @@ This repository includes multiple versions for different stages of experimentati
 |----------------|------------------------------|--------------|
 | Basic          | trm.py                       | Minimal TRM on toy datasets |
 | Intermediate   | trm_rl_evns.py               | TRM adapted for RL (Maze, Sudoku) |
-| Improved       | trm_rl_improved.py           | Adds shaped rewards, entropy bonus, gradient clipping |
+| Improved       | trm_rl_improved.py, trm_rl_optimized_updated_sudoku           | Adds shaped rewards, entropy bonus, gradient clipping |
 | Full (Paper)   | trm_rl_paper_implementation.py | Hierarchical TRM with K-cycles, carry, SwiGLU |
 | Debug          | trm_rl_debug.py              | Diagnostic tools and failure analysis |
 
@@ -40,17 +40,21 @@ Tiny Recursive Model/
 ├── README.txt
 ├── requirements.txt
 ├── trm_core/
+│   ├── README_TRM_PAPER.md
 │   ├── trm.py
+│   ├── trm_rl_debug.py
 │   ├── trm_rl_evns.py
 │   ├── trm_rl_improved.py
+│   ├── trm_rl_optimized.py
+│   ├── trm_rl_optimzed_updated_sudoku.py
 │   ├── trm_rl_paper_implementation.py
-│   └── trm_rl_debug.py
+│   └── utils/
+│       └── improved_sudoku_env.py
 ├── experiments/
 │   ├── simple_maze_comparison.py
-│   ├── maze_comparison.py
+│   └── maze_comparison.py
 ├── results/
-│   ├── plots/
-│   └── logs/
+│   └── experiments/
 └── docs/
     └── README_TRM_PAPER.md
 ```
