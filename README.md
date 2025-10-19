@@ -8,7 +8,6 @@ This repository implements multiple versions of the Tiny Recursivr Model (TRM) �
 a recurrent reasoning model designed for structured decision-making and temporal reasoning tasks.
 
 ##  TL;DR SUMMARY
-----------------------------------------
 
 | Task                  | File                              | Status         |
 |------------------------|-----------------------------------|----------------|
@@ -21,7 +20,6 @@ a recurrent reasoning model designed for structured decision-making and temporal
 
 
 ## 1. OVERVIEW
-----------------------------------------
 
 TRM introduces a hierarchical recursive architecture for reasoning tasks.
 
@@ -36,7 +34,6 @@ This repository includes multiple versions for different stages of experimentati
 | Debug          | trm_rl_debug.py              | Diagnostic tools and failure analysis |
 
 ## 2. FOLDER STRUCTURE
-----------------------------------------
 
 ```
 Tiny Recursive Model/
@@ -59,7 +56,6 @@ Tiny Recursive Model/
 ```
 
 ## 3. INSTALLATION
-----------------------------------------
 
 Clone the repository and install dependencies:
 
@@ -69,7 +65,6 @@ Clone the repository and install dependencies:
 
 
 ## 4. QUICK START
-----------------------------------------
 
 Step 1: Run a debug check
     python trm_core/trm_rl_debug.py
@@ -84,7 +79,6 @@ This will:
 
 
 ## 5. ARCHITECTURE SUMMARY
-----------------------------------------
 
 ### Basic TRM (evns, improved)
 ```
@@ -110,7 +104,6 @@ Key Features:
 
 
 ## 6. HYPERPARAMETER RECOMMENDATIONS
-----------------------------------------
 
 ### For Maze (5×5)
 ```python
@@ -146,7 +139,6 @@ n_episodes = 1000
 ```
 
 ## 7. EXPECTED RESULTS
-----------------------------------------
 
 ### Maze Environment (5×5)
 
@@ -159,7 +151,6 @@ n_episodes = 1000
 
 
 ## 8. RESEARCH DIRECTIONS
-----------------------------------------
 
 ### Easy Experiments
 - [ ] Test different K values (2, 3, 5, 7)
@@ -180,7 +171,6 @@ n_episodes = 1000
 - [ ] Publish results
 
 ## 9. LOGGING & VISUALIZATION
-----------------------------------------
 
 All implementations now include:
 - ✅ Episode rewards
@@ -196,7 +186,6 @@ The paper implementation additionally provides:
 - ✅ Smooth curves with raw data overlay
 
 ## 10. REQUIREMENTS
-----------------------------------------
 
 
 - Python >= 3.9
@@ -210,7 +199,6 @@ Install with:
     pip install torch numpy matplotlib tqdm gymnasium
 
 ## 11. CITATION
-----------------------------------------
 
 If you use this repository in your research, please cite:
 
