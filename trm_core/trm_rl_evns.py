@@ -228,15 +228,29 @@ def train_rl(env, policy, n_episodes=300, gamma=0.99, lr=1e-3):
 # ---------------------------------------
 # Example Usage
 # ---------------------------------------
-if __name__ == "__main__":
+def run_experiment(env_type='maze', n_episodes=500):
+    """
+    Run TRM training on specified environment
+
+    Args:
+        env_type: 'maze' or 'sudoku'
+        n_episodes: number of training episodes
+    """
     print("=" * 70)
-    print("TRM REINFORCEMENT LEARNING - MAZE & SUDOKU")
+    print(f"TRM REINFORCEMENT LEARNING - {env_type.upper()}")
     print("=" * 70)
 
-    # Choose environment
-    print("\nEnvironment: MazeEnv (5x5)")
-    env = MazeEnv(size=5)
-    # env = SudokuEnv(size=4)
+    # Create environment based on type
+    if env_type.lower() == 'maze':
+        env = MazeEnv(size=5)
+        print("\nEnvironment: MazeEnv (5x5)")
+        print("Goal: Navigate from (0,0) to (4,4)")
+    elif env_type.lower() == 'sudoku':
+        env = SudokuEnv(size=4)
+        print("\nEnvironment: SudokuEnv (4x4)")
+        print("Goal: Fill the grid following Sudoku rules")
+    else:
+        raise ValueError(f"Unknown environment type: {env_type}. Choose 'maze' or 'sudoku'")
 
     state_dim = env._get_state().numel()
     action_dim = 4 if isinstance(env, MazeEnv) else env.size**3
@@ -265,11 +279,42 @@ if __name__ == "__main__":
     train_rl(
         env,
         policy,
-        n_episodes=500,
+        n_episodes=n_episodes,
         gamma=0.95,    # Slightly lower discount for shorter-term rewards
         lr=3e-3        # Higher learning rate for faster learning
     )
 
     print("\n" + "=" * 70)
-    print("TRAINING COMPLETE")
+    print(f"TRAINING COMPLETE - {env_type.upper()}")
     print("=" * 70)
+
+if __name__ == "__main__":
+    import sys
+
+    # Default to maze, but allow command-line override
+    env_type = 'maze'
+    n_episodes = 500
+
+    if len(sys.argv) > 1:
+        env_type = sys.argv[1].lower()
+    if len(sys.argv) > 2:
+        n_episodes = int(sys.argv[2])
+
+    print("\nUsage: python trm_rl_evns.py [maze|sudoku|both] [n_episodes]")
+    print("Examples:")
+    print("  python trm_rl_evns.py maze 500")
+    print("  python trm_rl_evns.py sudoku 500")
+    print("  python trm_rl_evns.py both 300")
+    print()
+
+    # Run single or both environments
+    if env_type == 'both':
+        print("\n" + "=" * 70)
+        print("RUNNING BOTH ENVIRONMENTS")
+        print("=" * 70)
+
+        run_experiment('maze', n_episodes)
+        print("\n\n")
+        run_experiment('sudoku', n_episodes)
+    else:
+        run_experiment(env_type, n_episodes)

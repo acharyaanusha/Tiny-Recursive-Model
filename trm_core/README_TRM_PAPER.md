@@ -151,7 +151,7 @@ MLPPolicy(
 ### Basic Training
 
 ```python
-from trm_rl_paper_implementation import TRMPolicy, ImprovedMazeEnv, train_rl_with_deep_supervision
+from trm_rl import TRMPolicy, ImprovedMazeEnv, train_rl_with_deep_supervision
 
 # Setup environment
 env = ImprovedMazeEnv(size=5)
@@ -180,7 +180,7 @@ rewards, lengths = train_rl_with_deep_supervision(
 
 ```bash
 cd "Tiny Recursive Model (TRM)"
-python trm_rl_paper_implementation.py
+python trm_rl.py
 ```
 
 This will train:

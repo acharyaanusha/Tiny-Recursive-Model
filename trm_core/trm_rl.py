@@ -492,18 +492,38 @@ def plot_comparison(results_dict, save_name='trm_paper_comparison.png'):
 # ---------------------------------------
 # Main
 # ---------------------------------------
-def main():
+def run_comparison(env_type='maze', n_episodes=500, env_size=5):
+    """
+    Run TRM comparison experiment on specified environment
+
+    Args:
+        env_type: 'maze' or 'sudoku'
+        n_episodes: number of training episodes
+        env_size: size of the environment (5 for maze, 4 for sudoku)
+    """
     print("=" * 70)
-    print("TRM FOR RL - PAPER IMPLEMENTATION")
+    print(f"TRM FOR RL - {env_type.upper()}")
     print("Based on: Samsung SAIL Montreal's Tiny Recursive Models")
     print("=" * 70)
 
-    # Environment setup
-    env = ImprovedMazeEnv(size=5)
-    state_dim = 25
-    action_dim = 4
+    # Environment setup based on type
+    if env_type.lower() == 'maze':
+        env = ImprovedMazeEnv(size=env_size)
+        state_dim = env_size * env_size
+        action_dim = 4
+        print(f"\nEnvironment: Maze {env.size}x{env.size}")
+        print(f"Goal: Navigate from (0,0) to ({env.size-1},{env.size-1})")
+        success_threshold = 5.0
+    elif env_type.lower() == 'sudoku':
+        env = SudokuEnv(size=env_size)
+        state_dim = env_size * env_size
+        action_dim = env_size ** 3
+        print(f"\nEnvironment: Sudoku {env.size}x{env.size}")
+        print(f"Goal: Fill the grid following Sudoku rules")
+        success_threshold = 5.0
+    else:
+        raise ValueError(f"Unknown environment type: {env_type}. Choose 'maze' or 'sudoku'")
 
-    print(f"\nEnvironment: Maze {env.size}x{env.size}")
     print(f"State dim: {state_dim}, Action dim: {action_dim}")
 
     results = {}
@@ -525,7 +545,7 @@ def main():
     print(f"Parameters: {sum(p.numel() for p in trm_policy.parameters()):,}")
 
     trm_rewards, _ = train_rl_with_deep_supervision(
-        env, trm_policy, n_episodes=500, lr=2e-3,
+        env, trm_policy, n_episodes=n_episodes, lr=2e-3,
         entropy_coef=0.01, use_deep_supervision=True,
         policy_name="TRM (K=3 cycles)"
     )
@@ -535,6 +555,13 @@ def main():
     print("\n" + "=" * 70)
     print("2. TRM Policy with K=5 cycles")
     print("=" * 70)
+
+    # Reset environment for new training
+    if env_type.lower() == 'maze':
+        env = ImprovedMazeEnv(size=env_size)
+    else:
+        env = SudokuEnv(size=env_size)
+
     trm_k5_policy = TRMPolicy(
         state_dim=state_dim,
         action_dim=action_dim,
@@ -548,7 +575,7 @@ def main():
     print(f"Parameters: {sum(p.numel() for p in trm_k5_policy.parameters()):,}")
 
     trm_k5_rewards, _ = train_rl_with_deep_supervision(
-        env, trm_k5_policy, n_episodes=500, lr=2e-3,
+        env, trm_k5_policy, n_episodes=n_episodes, lr=2e-3,
         entropy_coef=0.01, use_deep_supervision=True,
         policy_name="TRM (K=5 cycles)"
     )
@@ -558,11 +585,18 @@ def main():
     print("\n" + "=" * 70)
     print("3. Baseline MLP Policy")
     print("=" * 70)
+
+    # Reset environment for new training
+    if env_type.lower() == 'maze':
+        env = ImprovedMazeEnv(size=env_size)
+    else:
+        env = SudokuEnv(size=env_size)
+
     mlp_policy = MLPPolicy(state_dim, action_dim, hidden=128)
     print(f"Parameters: {sum(p.numel() for p in mlp_policy.parameters()):,}")
 
     mlp_rewards, _ = train_rl_with_deep_supervision(
-        env, mlp_policy, n_episodes=500, lr=3e-3,
+        env, mlp_policy, n_episodes=n_episodes, lr=3e-3,
         entropy_coef=0.01, use_deep_supervision=False,
         policy_name="MLP Baseline"
     )
@@ -570,19 +604,76 @@ def main():
 
     # Final comparison
     print("\n" + "=" * 70)
-    print("FINAL RESULTS")
+    print(f"FINAL RESULTS - {env_type.upper()}")
     print("=" * 70)
     for name, rewards in results.items():
         final_50 = np.mean(rewards[-50:])
-        success = sum(1 for r in rewards[-50:] if r > 5) / 50 * 100
+        success = sum(1 for r in rewards[-50:] if r > success_threshold) / 50 * 100
         print(f"{name:20s}: avg_reward={final_50:5.2f}, success_rate={success:4.1f}%")
 
     # Visualize
-    plot_comparison(results)
+    plot_comparison(results, save_name=f'trm_paper_{env_type}_comparison.png')
 
     print("\n" + "=" * 70)
-    print("COMPLETE!")
+    print(f"COMPLETE - {env_type.upper()}!")
     print("=" * 70)
+
+    return results
+
+
+def main():
+    """Main function with command-line interface"""
+    import sys
+
+    # Default parameters
+    env_type = 'maze'
+    n_episodes = 500
+
+    if len(sys.argv) > 1:
+        env_type = sys.argv[1].lower()
+    if len(sys.argv) > 2:
+        n_episodes = int(sys.argv[2])
+
+    print("\nUsage: python trm_rl.py [maze|sudoku|both] [n_episodes]")
+    print("Examples:")
+    print("  python trm_rl.py maze 500")
+    print("  python trm_rl.py sudoku 500")
+    print("  python trm_rl.py both 300")
+    print()
+
+    # Run single or both environments
+    if env_type == 'both':
+        print("\n" + "=" * 70)
+        print("RUNNING BOTH ENVIRONMENTS")
+        print("=" * 70)
+
+        # Run maze
+        print("\n\n")
+        maze_results = run_comparison('maze', n_episodes, env_size=5)
+
+        # Run sudoku
+        print("\n\n")
+        sudoku_results = run_comparison('sudoku', n_episodes, env_size=4)
+
+        # Combined summary
+        print("\n" + "=" * 70)
+        print("COMBINED SUMMARY")
+        print("=" * 70)
+        print("\nMAZE RESULTS:")
+        for name, rewards in maze_results.items():
+            final_50 = np.mean(rewards[-50:])
+            success = sum(1 for r in rewards[-50:] if r > 5) / 50 * 100
+            print(f"  {name:20s}: avg_reward={final_50:5.2f}, success_rate={success:4.1f}%")
+
+        print("\nSUDOKU RESULTS:")
+        for name, rewards in sudoku_results.items():
+            final_50 = np.mean(rewards[-50:])
+            success = sum(1 for r in rewards[-50:] if r > 5) / 50 * 100
+            print(f"  {name:20s}: avg_reward={final_50:5.2f}, success_rate={success:4.1f}%")
+    else:
+        # Determine environment size
+        env_size = 5 if env_type == 'maze' else 4
+        run_comparison(env_type, n_episodes, env_size)
 
 
 if __name__ == "__main__":
