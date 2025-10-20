@@ -14,7 +14,7 @@ a recurrent reasoning model designed for structured decision-making and temporal
 | Learn TRM basics       | trm.py                                                | ✅ Basic       |
 | Debug RL setup         | trm_rl_debug.py                                       | ✅ Stable      |
 | Run RL experiments     | trm_rl_improved.py, trm_rl_optimized_updated_sudoku   | ✅✅ Improved   |
-| Paper-level TRM        | trm_rl_paper_implementation.py                        | ⭐ Recommended |
+| Paper-level TRM        | trm_rl.py                        | ⭐ Recommended |
 | Compare baselines      | maze_comparison.py                                    | ✅ Done  
 
 
@@ -30,7 +30,7 @@ This repository includes multiple versions for different stages of experimentati
 | Basic          | trm.py                       | Minimal TRM on toy datasets |
 | Intermediate   | trm_rl_evns.py               | TRM adapted for RL (Maze, Sudoku) |
 | Improved       | trm_rl_improved.py, trm_rl_optimized_updated_sudoku           | Adds shaped rewards, entropy bonus, gradient clipping |
-| Full (Paper)   | trm_rl_paper_implementation.py | Hierarchical TRM with K-cycles, carry, SwiGLU |
+| Full (Paper)   | trm_rl.py | Hierarchical TRM with K-cycles, carry, SwiGLU |
 | Debug          | trm_rl_debug.py              | Diagnostic tools and failure analysis |
 
 ## 2. FOLDER STRUCTURE
@@ -42,12 +42,12 @@ Tiny Recursive Model/
 ├── trm_core/
 │   ├── README_TRM_PAPER.md
 │   ├── trm.py
+│   ├── trm_rl.py
 │   ├── trm_rl_debug.py
 │   ├── trm_rl_evns.py
 │   ├── trm_rl_improved.py
 │   ├── trm_rl_optimized.py
 │   ├── trm_rl_optimzed_updated_sudoku.py
-│   ├── trm_rl_paper_implementation.py
 │   └── utils/
 │       └── improved_sudoku_env.py
 ├── experiments/
@@ -73,8 +73,8 @@ Clone the repository and install dependencies:
 Step 1: Run a debug check
     python trm_core/trm_rl_debug.py
 
-Step 2: Train the full TRM (Paper Implementation)
-    python trm_core/trm_rl_paper_implementation.py
+Step 2: Train the full TRM (Paper Implementation) with RL
+    python trm_core/trm_rl.py
 
 This will:
 - Train TRM with K=3 and K=5 recursive cycles
@@ -90,7 +90,7 @@ State → Embed → [Inner Steps × (Tiny Net)] → Head → Logits
                  ↑____ y_embed feedback ______|
 ```
 
-### Paper TRM (paper_implementation)
+### Paper TRM RL
 ```
 State → Embed → H-Level → L-Level → Feedback ┐
                    ↑_______carry_______________|
@@ -111,7 +111,7 @@ Key Features:
 
 ### For Maze (5×5)
 ```python
-# trm_rl_paper_implementation.py
+# trm_rl.py
 TRMPolicy(
     h_dim=64,
     l_dim=32,
@@ -148,10 +148,10 @@ n_episodes = 1000
 
 | Implementation | Typical Success Rate | Training Speed |
 |----------------|---------------------|----------------|
-| trm_rl_evns.py | ~20-30% | Medium |
-| trm_rl_improved.py | ~70-80% | Medium |
-| **trm_rl_paper_implementation.py** | **~85-90%** | Slower (K cycles) |
-| MLP Baseline | ~60-70% | Fast |
+| trm_rl_evns.py | ~0-10% | Medium |
+| trm_rl_improved.py | ~20-30% | Medium |
+| **trm_rl.py** | **~30-40%** | Slower (K cycles) [Maze]|
+| MLP Baseline | ~20-30% | Fast |
 
 
 ## 8. RESEARCH DIRECTIONS
