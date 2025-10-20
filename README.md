@@ -1,10 +1,10 @@
 
 ## 🧩 TINY RECURSIVE MODEL (TRM)
 
-Original Implementation of TRM with Reinforcement Learning Environments
+Unofficial Implementation of Tiny Recursive Model (TRM). Original Implementation of TRM with Reinforcement Learning Environments
 (Maze, Sudoku, etc.)
 
-This repository implements multiple versions of the Tiny Recursivr Model (TRM) —
+This repository implements multiple versions of the Tiny Recursive Model (TRM) —
 a recurrent reasoning model designed for structured decision-making and temporal reasoning tasks.
 
 ##  TL;DR SUMMARY
@@ -203,6 +203,18 @@ Install with:
     pip install torch numpy matplotlib tqdm gymnasium
 
 ## 11. CITATION
+
+```
+@misc{jolicoeurmartineau2025morerecursivereasoningtiny,
+    title   = {Less is More: Recursive Reasoning with Tiny Networks}, 
+    author  = {Alexia Jolicoeur-Martineau},
+    year    = {2025},
+    eprint  = {2510.04871},
+    archivePrefix = {arXiv},
+    primaryClass = {cs.LG},
+    url     = {https://arxiv.org/abs/2510.04871}, 
+}
+```
 
 If you use this repository in your research, please cite:
 
