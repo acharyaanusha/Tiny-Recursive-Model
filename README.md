@@ -1,214 +1,161 @@
+# Tiny Recursive Model (TRM)
 
-## 🧩 TINY RECURSIVE MODEL (TRM)
+**A Parameter-Efficient Hierarchical Architecture for Iterative Reasoning**
 
-Original Implementation of TRM with Reinforcement Learning Environments
-(Maze, Sudoku, etc.)
+## Abstract
 
-This repository implements multiple versions of the Tiny Recursivr Model (TRM) —
-a recurrent reasoning model designed for structured decision-making and temporal reasoning tasks.
+This repo implements the Tiny Recursive Model (TRM) — a lightweight recurrent architecture designed for structured reasoning through hierarchical recursion.
 
-##  TL;DR SUMMARY
+We experiment with TRM in both supervised and reinforcement learning settings.
 
-| Task                   | File                                                   | Status         |
-|------------------------|-------------------------------------------------------|----------------|
-| Learn TRM basics       | trm.py                                                | ✅ Basic       |
-| Debug RL setup         | trm_rl_debug.py                                       | ✅ Stable      |
-| Run RL experiments     | trm_rl_improved.py, trm_rl_optimized_updated_sudoku   | ✅✅ Improved   |
-| Paper-level TRM        | trm_rl.py                        | ⭐ Recommended |
-| Compare baselines      | maze_comparison.py                                    | ✅ Done  
+In supervised tasks, TRM achieves strong parameter efficiency (up to 67–87% fewer parameters).
 
+In reinforcement learning, we find that policy gradient methods struggle to fully exploit TRM’s recursive reasoning ability.
 
+Overall, our results suggest that iterative refinement models work best when trained with structured or explicit supervision.
 
-## 1. OVERVIEW
+**Full experimental analysis:** [EXPERIMENTAL_RESULTS.md](EXPERIMENTAL_RESULTS.md)
 
-TRM introduces a hierarchical recursive architecture for reasoning tasks.
+## Key Contributions
 
-This repository includes multiple versions for different stages of experimentation:
+1. **Parameter Efficiency**: TRM achieves competitive accuracy with 67-87% fewer parameters than baseline models on supervised spatial reasoning tasks
+2. **Architectural Innovation**: Hierarchical recursive design with K-cycle iterative refinement and carry mechanisms
+3. **Empirical Analysis**: Systematic comparison across learning paradigms revealing task-specific architectural benefits
+4. **Open Implementation**: Modular codebase enabling replication and extension of results
 
-| Level         | File Name                     | Description |
-|----------------|------------------------------|--------------|
-| Basic          | trm.py                       | Minimal TRM on toy datasets |
-| Intermediate   | trm_rl_evns.py               | TRM adapted for RL (Maze, Sudoku) |
-| Improved       | trm_rl_improved.py, trm_rl_optimized_updated_sudoku           | Adds shaped rewards, entropy bonus, gradient clipping |
-| Full (Paper)   | trm_rl.py | Hierarchical TRM with K-cycles, carry, SwiGLU |
-| Debug          | trm_rl_debug.py              | Diagnostic tools and failure analysis |
+---
 
-## 2. FOLDER STRUCTURE
+## 1. Overview
+
+TRM is a hierarchical recursive architecture where representations are iteratively refined through multiple reasoning cycles. The model uses two nested processing levels (H-level and L-level) with a carry mechanism for information persistence.
+
+### Implementation Variants
+
+| Implementation | Module | Description |
+|----------------|--------|-------------|
+| **Baseline** | trm.py | Minimal recursive architecture |
+| **RL-Adapted** | trm_rl_evns.py | Environment-specific RL implementations |
+| **Enhanced** | trm_rl_improved.py | Improved training strategies |
+| **Full** | trm_rl.py | Complete hierarchical TRM with K-cycles |
+| **Debug** | trm_rl_debug.py | Diagnostic tools |
+
+---
+
+## 2. Repository Structure
 
 ```
 Tiny Recursive Model/
-├── README.txt
+├── README.md
+├── EXPERIMENTAL_RESULTS.md
 ├── requirements.txt
 ├── trm_core/
-│   ├── README_TRM_PAPER.md
 │   ├── trm.py
 │   ├── trm_rl.py
 │   ├── trm_rl_debug.py
 │   ├── trm_rl_evns.py
 │   ├── trm_rl_improved.py
 │   ├── trm_rl_optimized.py
-│   ├── trm_rl_optimzed_updated_sudoku.py
+│   ├── trm_rl_optimized_updated_sudoku.py
 │   └── utils/
 │       └── improved_sudoku_env.py
 ├── experiments/
 │   ├── simple_maze_comparison.py
 │   └── maze_comparison.py
-├── results/
-│   └── experiments/
-└── docs/
-    └── README_TRM_PAPER.md
+└── results/
+    └── experiments/
 ```
 
-## 3. INSTALLATION
+---
 
-Clone the repository and install dependencies:
+## 3. Installation
 
-    git clone https://github.com/acharyaanusha/Tiny-Recursive-Model.git
-    cd Tiny-Recursive-Model
-    pip install -r requirements.txt
-
-
-## 4. QUICK START
-
-Step 1: Run a debug check
-    python trm_core/trm_rl_debug.py
-
-Step 2: Train the full TRM (Paper Implementation) with RL
-    python trm_core/trm_rl.py
-
-This will:
-- Train TRM with K=3 and K=5 recursive cycles
-- Train an MLP baseline
-- Save comparison plots and logs under "results/"
-
-
-## 5. ARCHITECTURE SUMMARY
-
-### Basic TRM (evns, improved)
-```
-State → Embed → [Inner Steps × (Tiny Net)] → Head → Logits
-                 ↑____ y_embed feedback ______|
+```bash
+git clone https://github.com/acharyaanusha/Tiny-Recursive-Model.git
+cd Tiny-Recursive-Model
+pip install -r requirements.txt
 ```
 
-### Paper TRM RL
+**Requirements:** Python ≥ 3.9, PyTorch ≥ 2.0, NumPy, Matplotlib, tqdm, gymnasium
+
+---
+
+## 4. Running Experiments
+
+**Supervised Learning:**
+```bash
+python experiments/simple_maze_comparison.py  # 8×8 maze
+python experiments/maze_comparison.py         # 10×10 maze
 ```
-State → Embed → H-Level → L-Level → Feedback ┐
-                   ↑_______carry_______________|
+
+**Reinforcement Learning:**
+```bash
+python trm_core/trm_rl_debug.py  # Diagnostics
+python trm_core/trm_rl.py        # Full training
+```
+
+---
+
+## 5. Architecture
+
+**Baseline:**
+```
+State → Embedding → [Recursive Processing] → Output
+                           ↑___feedback____|
+```
+
+**Hierarchical TRM:**
+```
+State → Embedding → H-Level → L-Level → Output
+                      ↑______carry______|
                    (repeat K cycles)
-                         ↓
-                    Action Head → Logits
 ```
 
-Key Features:
-- Recursive reasoning with K cycles
-- SwiGLU activations
-- Carry mechanism for information retention
-- Deep supervision
-- Multiple baseline comparisons (MLP, TRM-K3, TRM-K5)
+**Key Features:** K-cycle recursion, hierarchical processing, carry mechanism, SwiGLU activation, deep supervision
 
+---
 
-## 6. HYPERPARAMETER RECOMMENDATIONS
+## 6. Hyperparameters
 
-### For Maze (5×5)
-```python
-# trm_rl.py
-TRMPolicy(
-    h_dim=64,
-    l_dim=32,
-    k_cycles=3,      # Start with 3
-    n_h_layers=2,
-    n_l_layers=1
-)
+**Maze (5×5):** h_dim=64, l_dim=32, k_cycles=3, lr=2e-3, episodes=500
 
-# Training
-lr = 2e-3          # Lower than MLP
-entropy_coef = 0.01
-n_episodes = 500
-```
+**Sudoku (4×4):** h_dim=128, l_dim=64, k_cycles=5, lr=1e-3, episodes=1000
 
-### For Sudoku (4×4)
-```python
-TRMPolicy(
-    h_dim=128,       # Bigger for combinatorial
-    l_dim=64,
-    k_cycles=5,      # More reasoning needed
-    n_h_layers=3,
-    n_l_layers=2
-)
+---
 
-# Training
-lr = 1e-3          # Lower due to complexity
-entropy_coef = 0.02  # More exploration
-n_episodes = 1000
-```
+## 7. Results
 
-## 7. EXPECTED RESULTS
+**Full analysis:** [EXPERIMENTAL_RESULTS.md](EXPERIMENTAL_RESULTS.md)
 
-### Maze Environment (5×5)
+### Supervised Learning
 
-| Implementation | Typical Success Rate | Training Speed |
-|----------------|---------------------|----------------|
-| trm_rl_evns.py | ~0-10% | Medium |
-| trm_rl_improved.py | ~20-30% | Medium |
-| **trm_rl.py** | **~30-40%** | Slower (K cycles) [Maze]|
-| MLP Baseline | ~20-30% | Fast |
+| Task | Model | Parameters | Accuracy |
+|------|-------|------------|----------|
+| Simple Maze (8×8) | CNN | 74,850 | 100% |
+| | **TRM** | **9,922** | **100%** (87% fewer params) |
+| Complex Maze (10×10) | Transformer | ~150K | ~100% |
+| | **TRM** | **~50K** | **~100%** (67% fewer params) |
 
+### Reinforcement Learning
 
-## 8. RESEARCH DIRECTIONS
+| Model | Parameters | Success Rate |
+|-------|------------|--------------|
+| MLP Baseline | 20,356 | **36.0%** |
+| TRM (K=5) | 69,038 | 34.0% |
+| TRM (K=3) | 69,038 | 22.0% |
 
-### Easy Experiments
-- [ ] Test different K values (2, 3, 5, 7)
-- [ ] Compare SwiGLU vs ReLU
-- [ ] Ablation: with/without carry mechanism
-- [ ] Different maze sizes (3×3, 7×7, 9×9)
+### Key Findings
 
-### Medium Experiments
-- [ ] Add attention in H-level
-- [ ] Implement adaptive halting (ACT)
-- [ ] Multi-task learning (Maze + Sudoku)
-- [ ] Curriculum learning
+- **Supervised:** TRM achieves competitive accuracy with 67-87% fewer parameters
+- **RL:** TRM does not outperform MLP despite 3× more parameters
+- **Hypothesis:** Iterative refinement requires structured targets (labels) rather than scalar rewards for effective learning
 
-### Advanced Experiments
-- [ ] Image-based RL (Atari)
-- [ ] Continuous control
-- [ ] Compare with Transformers
-- [ ] Publish results
+---
 
-## 9. LOGGING & VISUALIZATION
+## 8. Citation
 
-All implementations now include:
-- ✅ Episode rewards
-- ✅ Success rates
-- ✅ Average performance windows
-- ✅ Best performance tracking
-- ✅ Training curves
-- ✅ Success rate over time
-
-The paper implementation additionally provides:
-- ✅ Multiple model comparison
-- ✅ Parameter count comparison
-- ✅ Smooth curves with raw data overlay
-
-## 10. REQUIREMENTS
-
-
-- Python >= 3.9
-- PyTorch >= 2.0
-- NumPy
-- Matplotlib
-- tqdm
-- gymnasium (or gym)
-
-Install with:
-    pip install torch numpy matplotlib tqdm gymnasium
-
-## 11. CITATION
-
-If you use this repository in your research, please cite:
-
-```
-@software{anushaacharya2025trm,
-  title  = {Tiny Recursive Models (TRM)},
+```bibtex
+@software{acharya2025trm,
+  title  = {Tiny Recursive Model (TRM): A Parameter-Efficient Hierarchical Architecture for Iterative Reasoning},
   author = {Anusha Acharya},
   year   = {2025},
   url    = {https://github.com/acharyaanusha/Tiny-Recursive-Model}
