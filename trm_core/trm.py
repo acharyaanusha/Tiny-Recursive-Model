@@ -1,7 +1,3 @@
-# trm_example.py
-# Requires: torch (tested on torch >=1.13)
-# Usage: python trm_example.py
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
