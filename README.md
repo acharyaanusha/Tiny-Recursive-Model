@@ -153,7 +153,7 @@ State → Embedding → H-Level → L-Level → Output
 
 ## 8. Citation
 
-```
+```bibtex
 @misc{jolicoeurmartineau2025morerecursivereasoningtiny,
     title   = {Less is More: Recursive Reasoning with Tiny Networks}, 
     author  = {Alexia Jolicoeur-Martineau},
